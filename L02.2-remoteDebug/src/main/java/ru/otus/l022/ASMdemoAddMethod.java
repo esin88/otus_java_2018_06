@@ -52,3 +52,8 @@ public class ASMdemoAddMethod {
 
 }
 
+line1  operation
+line2  paramInt
+line3  this.value
+
+

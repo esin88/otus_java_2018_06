@@ -20,6 +20,7 @@ public class RemoteDebug {
 
     private void loop() throws InterruptedException {
         while (true) {
+            value += 110;
             incVal();
             System.out.println(value);
             Thread.sleep(2_000);
@@ -27,7 +28,7 @@ public class RemoteDebug {
     }
 
     private void incVal() throws InterruptedException {
-        value += 10;
+
     }
 
 }

@@ -19,6 +19,8 @@ public class MyClass {
         return value;
     }
 
+
+
     public static void main(String[] args) throws Exception {
         System.out.println("main");
         MyClass demo = new MyClass();

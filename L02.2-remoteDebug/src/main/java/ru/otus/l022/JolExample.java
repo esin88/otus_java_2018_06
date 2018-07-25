@@ -12,17 +12,20 @@ import org.openjdk.jol.vm.VM;
 public class JolExample {
 
     public static void main(String[] args)  {
+
         System.out.println("boolean:" + VM.current().sizeOfField("boolean"));
-/*
+
         System.out.println(ClassLayout.parseClass(TestB.class).toPrintable());
+
         System.out.println(ClassLayout.parseClass(TestB2.class).toPrintable());
         System.out.println(ClassLayout.parseClass(TestB4.class).toPrintable());
         System.out.println(ClassLayout.parseClass(TestInt.class).toPrintable());
+
         System.out.println(ClassLayout.parseClass(TestInt2.class).toPrintable());
         System.out.println(ClassLayout.parseClass(TestInt4.class).toPrintable());
 
         System.out.println(ClassLayout.parseClass(Mix.class).toPrintable());
-*/
+
     }
 
     public class TestB {
