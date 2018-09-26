@@ -35,9 +35,8 @@ public class FilesExample {
         System.out.println("file size: " + size);
 
 
-        System.out.println("content:");
-        Stream<String> lines = Files.lines(path);
-        lines.forEach(System.out::println);
+        System.out.println("contentAll:");
+        Files.lines(path).forEach(System.out::println);
 
         String testString = "Test-Test-Data-String";
         Files.write(Paths.get("L09.2-xml-nio/tmp/newFile.txt"), testString.getBytes());
