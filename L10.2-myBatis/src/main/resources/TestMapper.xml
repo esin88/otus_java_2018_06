@@ -10,6 +10,10 @@
         <result column="name" property="name"/>
     </resultMap>
 
+    <insert id="insert">
+        insert into test (id, name) values (#{id}, #{name})
+    </insert>
+
     <select id="selectTestOne" resultType="ru.otus.mybatis.Test">
       select * from Test where id = #{id}
     </select>

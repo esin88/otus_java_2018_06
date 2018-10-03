@@ -34,11 +34,26 @@ public class BatisDemo {
         selectLike();
         System.out.println();
         selectForEach();
+        System.out.println();
+        insert();
     }
 
     private void selectOne() {
         try (SqlSession session = sqlSessionFactory.openSession()) {
             Test test = session.selectOne("testMapper.selectTestOne", 1);
+            System.out.println("selected: " + test);
+        }
+    }
+
+    private void insert() {
+        try (SqlSession session = sqlSessionFactory.openSession()) {
+            Map<String, String> params = new HashMap<>();
+            params.put("id", "500");
+            params.put("name", "TestInsertovich");
+            int rowCount = session.insert("testMapper.insert", params);
+            System.out.println("inserted: " + rowCount);
+
+            Test test = session.selectOne("testMapper.selectTestOne", 500);
             System.out.println("selected: " + test);
         }
     }
