@@ -37,7 +37,7 @@ public class TimerServlet extends HttpServlet {
 
         response.getWriter().println(templateProcessor.getPage(TIMER_PAGE_TEMPLATE, pageVariables));
 
-        response.setContentType("application/json");
+        response.setContentType("text/html;charset=utf-8");
         response.setStatus(HttpServletResponse.SC_OK);
     }
 
