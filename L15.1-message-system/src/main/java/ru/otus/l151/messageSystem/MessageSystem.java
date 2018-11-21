@@ -11,7 +11,6 @@ import java.util.logging.Logger;
 /**
  * @author tully
  */
-@SuppressWarnings("LoopStatementThatDoesntLoop")
 public final class MessageSystem {
     private final static Logger logger = Logger.getLogger(MessageSystem.class.getName());
     private static final int DEFAULT_STEP_TIME = 10;
