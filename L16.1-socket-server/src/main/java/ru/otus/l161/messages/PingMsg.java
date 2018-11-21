@@ -9,7 +9,6 @@ public class PingMsg extends Msg {
     private final long time;
 
     public PingMsg() {
-        super(PingMsg.class);
         time = System.currentTimeMillis();
     }
 

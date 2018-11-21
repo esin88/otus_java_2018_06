@@ -1,9 +1,6 @@
 package ru.otus.l161.channel;
 
-import com.google.gson.Gson;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import ru.otus.l161.app.Msg;
 import ru.otus.l161.app.MsgWorker;
 
@@ -25,6 +22,7 @@ import java.util.logging.Logger;
 public class SocketMsgWorker implements MsgWorker {
     private static final Logger logger = Logger.getLogger(SocketMsgWorker.class.getName());
     private static final int WORKERS_COUNT = 2;
+    private static final ObjectMapper MAPPER = new ObjectMapper();
 
     private final BlockingQueue<Msg> output = new LinkedBlockingQueue<>();
     private final BlockingQueue<Msg> input = new LinkedBlockingQueue<>();
@@ -66,10 +64,11 @@ public class SocketMsgWorker implements MsgWorker {
     private void sendMessage() {
         try (PrintWriter out = new PrintWriter(socket.getOutputStream(), true)) {
             while (socket.isConnected()) {
-                Msg msg = output.take(); //blocks
-                String json = new Gson().toJson(msg);
+                final Msg msg = output.take(); //blocks
+                final String json = MAPPER.writeValueAsString(msg);
                 out.println(json);
                 out.println();//line with json + an empty line
+//                System.out.println("Message sent: " + json);
             }
         } catch (InterruptedException | IOException e) {
             logger.log(Level.SEVERE, e.getMessage());
@@ -85,26 +84,17 @@ public class SocketMsgWorker implements MsgWorker {
                 //System.out.println("Message received: " + inputLine);
                 stringBuilder.append(inputLine);
                 if (inputLine.isEmpty()) { //empty line is the end of the message
-                    String json = stringBuilder.toString();
-                    Msg msg = getMsgFromJSON(json);
+                    final String json = stringBuilder.toString();
+//                    System.out.println("Message received: " + json);
+                    final Msg msg = MAPPER.readValue(json, Msg.class);
                     input.add(msg);
                     stringBuilder = new StringBuilder();
                 }
             }
-        } catch (IOException | ParseException e) {
+        } catch (IOException e) {
             logger.log(Level.SEVERE, e.getMessage());
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
         } finally {
             close();
         }
-    }
-
-    private static Msg getMsgFromJSON(String json) throws ParseException, ClassNotFoundException {
-        JSONParser jsonParser = new JSONParser();
-        JSONObject jsonObject = (JSONObject) jsonParser.parse(json);
-        String className = (String) jsonObject.get(Msg.CLASS_NAME_VARIABLE);
-        Class<?> msgClass = Class.forName(className);
-        return (Msg) new Gson().fromJson(json, msgClass);
     }
 }

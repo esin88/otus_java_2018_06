@@ -34,7 +34,7 @@ public class ClientMain {
         executorService.submit(() -> {
             try {
                 while (true) {
-                    Object msg = client.take();
+                    final Msg msg = client.take();
                     System.out.println("Message received: " + msg.toString());
                 }
             } catch (InterruptedException e) {
