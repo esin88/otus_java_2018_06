@@ -1,14 +1,10 @@
 package ru.otus.l161.app;
 
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+
 /**
  * Created by tully.
  */
+@JsonTypeInfo(use = JsonTypeInfo.Id.CLASS)
 public abstract class Msg {
-    public static final String CLASS_NAME_VARIABLE = "className";
-
-    private final String className;
-
-    protected Msg(Class<?> klass) {
-        this.className = klass.getName();
-    }
 }
