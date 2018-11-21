@@ -11,7 +11,6 @@ import java.util.logging.Logger;
 /**
  * @author tully
  */
-@SuppressWarnings("LoopStatementThatDoesntLoop")
 public final class MessageSystem {
     private final static Logger logger = Logger.getLogger(MessageSystem.class.getName());
     private static final int DEFAULT_STEP_TIME = 10;
@@ -40,16 +39,14 @@ public final class MessageSystem {
         for (Map.Entry<Address, Addressee> entry : addresseeMap.entrySet()) {
             String name = "MS-worker-" + entry.getKey().getId();
             Thread thread = new Thread(() -> {
+                LinkedBlockingQueue<Message> queue = messagesMap.get(entry.getKey());
                 while (true) {
-                    LinkedBlockingQueue<Message> queue = messagesMap.get(entry.getKey());
-                    while (true) {
-                        try {
-                            Message message = queue.take();
-                            message.exec(entry.getValue());
-                        } catch (InterruptedException e) {
-                            logger.log(Level.INFO, "Thread interrupted. Finishing: " + name);
-                            return;
-                        }
+                    try {
+                        Message message = queue.take();
+                        message.exec(entry.getValue());
+                    } catch (InterruptedException e) {
+                        logger.log(Level.INFO, "Thread interrupted. Finishing: " + name);
+                        return;
                     }
                 }
             });
