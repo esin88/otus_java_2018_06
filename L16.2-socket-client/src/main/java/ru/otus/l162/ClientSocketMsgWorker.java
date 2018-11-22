@@ -1,4 +1,4 @@
-package l161;
+package ru.otus.l162;
 
 import ru.otus.l161.channel.SocketMsgWorker;
 
@@ -21,6 +21,7 @@ class ClientSocketMsgWorker extends SocketMsgWorker {
         this.socket = socket;
     }
 
+    @Override
     public void close() {
         try {
             super.close();

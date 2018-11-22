@@ -40,9 +40,9 @@ public class EchoSocketMsgServer implements EchoSocketMsgServerMBean {
             logger.info("Server started on port: " + serverSocket.getLocalPort());
             while (!executor.isShutdown()) {
                 Socket socket = serverSocket.accept(); //blocks
-                SocketMsgWorker client = new SocketMsgWorker(socket);
-                client.init();
-                workers.add(client);
+                SocketMsgWorker worker = new SocketMsgWorker(socket);
+                worker.init();
+                workers.add(worker);
             }
         }
     }
@@ -50,12 +50,12 @@ public class EchoSocketMsgServer implements EchoSocketMsgServerMBean {
     @SuppressWarnings("InfiniteLoopStatement")
     private void echo() {
         while (true) {
-            for (MsgWorker client : workers) {
-                Msg msg = client.pool();
+            for (MsgWorker worker : workers) {
+                Msg msg = worker.poll();
                 while (msg != null) {
                     System.out.println("Mirroring the message: " + msg.toString());
-                    client.send(msg);
-                    msg = client.pool();
+                    worker.send(msg);
+                    msg = worker.poll();
                 }
             }
             try {
