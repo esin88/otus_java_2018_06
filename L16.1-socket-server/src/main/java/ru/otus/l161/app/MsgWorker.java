@@ -10,7 +10,7 @@ import java.io.Closeable;
 public interface MsgWorker extends Closeable {
     void send(Msg msg);
 
-    Msg pool();
+    Msg poll();
 
     @Blocks
     Msg take() throws InterruptedException;
