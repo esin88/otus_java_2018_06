@@ -1,4 +1,4 @@
-package ru.otus.l162;
+package ru.otus.l161;
 
 import ru.otus.l161.channel.SocketMsgWorker;
 
