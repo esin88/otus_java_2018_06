@@ -14,6 +14,7 @@ public class ClientWorker extends BaseSocketWorker {
     private static final int SLEEP_TIME_MS = 100;
 
     private final Thread worker = new Thread(this::workLoop);
+//    private final ExecutorService executor = Executors.newSingleThreadExecutor();
 
     public ClientWorker(String host, int port) throws IOException {
         super(new Socket(host, port));
@@ -22,6 +23,7 @@ public class ClientWorker extends BaseSocketWorker {
     @Override
     public void start() {
         super.start();
+//        executor.submit(this::workLoop);
         worker.setName("ClientWorker");
         worker.start();
     }
@@ -30,6 +32,7 @@ public class ClientWorker extends BaseSocketWorker {
     public void close() {
         super.close();
         worker.interrupt();
+//        executor.shutdownNow();
     }
 
     @Blocks
