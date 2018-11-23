@@ -29,7 +29,7 @@ public class SocketMsgWorker implements MsgWorker {
     private final BlockingQueue<Msg> input = new LinkedBlockingQueue<>(QUEUE_CAPACITY);
 
     private final ExecutorService executor;
-    private final Socket socket;
+    protected final Socket socket;
 
     public SocketMsgWorker(Socket socket) {
         this.socket = socket;
@@ -46,6 +46,7 @@ public class SocketMsgWorker implements MsgWorker {
         return input.poll();
     }
 
+    @Blocks
     @Override
     public Msg take() throws InterruptedException {
         return input.take();
