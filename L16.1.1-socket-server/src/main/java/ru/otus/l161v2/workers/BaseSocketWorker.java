@@ -43,6 +43,7 @@ public class BaseSocketWorker implements SocketWorker {
         return output.offer(message);
     }
 
+    @Blocks
     @Override
     public final void put(Message message) throws InterruptedException {
         output.put(message);
