@@ -1,4 +1,4 @@
-package ru.otus.l161.app;
+package ru.otus.l162.app;
 
 import java.io.Closeable;
 

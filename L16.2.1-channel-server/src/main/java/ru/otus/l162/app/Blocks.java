@@ -1,4 +1,4 @@
-package ru.otus.l161.channel;
+package ru.otus.l162.app;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;

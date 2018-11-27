@@ -1,15 +1,17 @@
-package ru.otus.l161.channel;
+package ru.otus.l162.channel;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import ru.otus.l161.app.Blocks;
-import ru.otus.l161.app.Msg;
-import ru.otus.l161.app.MsgWorker;
+import ru.otus.l162.app.Blocks;
+import ru.otus.l162.app.Msg;
+import ru.otus.l162.app.MsgWorker;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -29,12 +31,14 @@ public class SocketMsgWorker implements MsgWorker {
     private final BlockingQueue<Msg> output = new LinkedBlockingQueue<>(QUEUE_CAPACITY);
     private final BlockingQueue<Msg> input = new LinkedBlockingQueue<>(QUEUE_CAPACITY);
 
-    private final ExecutorService executor;
     protected final Socket socket;
+    private final ExecutorService executor;
+    private final List<Runnable> shutdownRegistrations;
 
     public SocketMsgWorker(Socket socket) {
         this.socket = socket;
         this.executor = Executors.newFixedThreadPool(WORKERS_COUNT);
+        this.shutdownRegistrations = new ArrayList<>();
     }
 
     @Override
@@ -55,12 +59,19 @@ public class SocketMsgWorker implements MsgWorker {
 
     @Override
     public void close() {
+        shutdownRegistrations.forEach(Runnable::run);
+        shutdownRegistrations.clear();
+
         executor.shutdown();
     }
 
     public void init() {
         executor.execute(this::sendMessage);
         executor.execute(this::receiveMessage);
+    }
+
+    public void addShutdownRegistration(Runnable runnable) {
+        this.shutdownRegistrations.add(runnable);
     }
 
     @Blocks
