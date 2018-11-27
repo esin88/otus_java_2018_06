@@ -4,8 +4,8 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>L16.1.1-socket-server</artifactId>
     <groupId>ru.otus</groupId>
+    <artifactId>L16.2.1-channel-server</artifactId>
     <version>2018-06</version>
 
     <properties>

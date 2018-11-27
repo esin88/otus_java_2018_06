@@ -1,9 +1,9 @@
-package ru.otus.l161.server;
+package ru.otus.l162.server;
 
-import ru.otus.l161.app.Msg;
-import ru.otus.l161.app.MsgWorker;
-import ru.otus.l161.app.Blocks;
-import ru.otus.l161.channel.SocketMsgWorker;
+import ru.otus.l162.app.Blocks;
+import ru.otus.l162.app.Msg;
+import ru.otus.l162.app.MsgWorker;
+import ru.otus.l162.channel.SocketMsgWorker;
 
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -17,17 +17,17 @@ import java.util.logging.Logger;
 /**
  * Created by tully.
  */
-public class EchoSocketMsgServer implements EchoSocketMsgServerMBean {
-    private static final Logger logger = Logger.getLogger(EchoSocketMsgServer.class.getName());
+public class BlockingEchoSocketMsgServer {
+    private static final Logger logger = Logger.getLogger(NonBlockingEchoSocketMsgServer.class.getName());
 
     private static final int THREADS_NUMBER = 1;
     private static final int PORT = 5050;
-    private static final int MIRROR_DELAY_MS = 100;
+    private static final int ECHO_DELAY = 100;
 
     private final ExecutorService executor;
     private final List<MsgWorker> workers;
 
-    public EchoSocketMsgServer() {
+    public BlockingEchoSocketMsgServer() {
         executor = Executors.newFixedThreadPool(THREADS_NUMBER);
         workers = new CopyOnWriteArrayList<>();
     }
@@ -42,6 +42,7 @@ public class EchoSocketMsgServer implements EchoSocketMsgServerMBean {
                 Socket socket = serverSocket.accept(); //blocks
                 SocketMsgWorker worker = new SocketMsgWorker(socket);
                 worker.init();
+                worker.addShutdownRegistration(() -> workers.remove(worker));
                 workers.add(worker);
             }
         }
@@ -50,32 +51,19 @@ public class EchoSocketMsgServer implements EchoSocketMsgServerMBean {
     @SuppressWarnings("InfiniteLoopStatement")
     private void echo() {
         while (true) {
-            for (MsgWorker worker : workers) {
-                Msg msg = worker.poll();
+            for (MsgWorker client : workers) {
+                Msg msg = client.poll(); //get
                 while (msg != null) {
-                    System.out.println("Mirroring the message: " + msg.toString());
-                    worker.send(msg);
-                    msg = worker.poll();
+                    System.out.println("Echoing the message: " + msg.toString());
+                    client.send(msg);
+                    msg = client.poll();
                 }
             }
             try {
-                Thread.sleep(MIRROR_DELAY_MS);
+                Thread.sleep(ECHO_DELAY);
             } catch (InterruptedException e) {
                 logger.log(Level.SEVERE, e.toString());
             }
-        }
-    }
-
-    @Override
-    public boolean getRunning() {
-        return true;
-    }
-
-    @Override
-    public void setRunning(boolean running) {
-        if (!running) {
-            executor.shutdown();
-            logger.info("Bye.");
         }
     }
 }

@@ -19,7 +19,7 @@ import java.util.logging.Logger;
 public class ServerMain {
     private static final Logger logger = Logger.getLogger(ServerMain.class.getName());
 
-    private static final String CLIENT_START_COMMAND = "java -jar ../L16.1.2-socket-client/target/client.jar";
+    private static final String CLIENT_START_COMMAND = "/Library/Java/JavaVirtualMachines/jdk-11.0.1.jdk/Contents/Home/bin/java -jar ../L16.1.2-socket-client/target/client.jar";
     private static final int CLIENT_START_DELAY_SEC = 5;
 
     public static void main(String[] args) throws Exception {
@@ -28,7 +28,7 @@ public class ServerMain {
 
     private void start() throws Exception {
         ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
-        //startClient(executorService);
+//        startClient(executorService);
 
         MBeanServer mbs = ManagementFactory.getPlatformMBeanServer();
         ObjectName name = new ObjectName("ru.otus:type=Server");
