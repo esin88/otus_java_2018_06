@@ -9,6 +9,11 @@ public class PingMsg extends Msg {
     private final long time;
     private final String pid;
 
+    public PingMsg() {
+        this.pid = "";
+        this.time = 0L;
+    }
+
     public PingMsg(String pid) {
         this.pid = pid;
         time = System.currentTimeMillis();

@@ -39,10 +39,12 @@ public class BlockingEchoSocketMsgServer {
         try (ServerSocket serverSocket = new ServerSocket(PORT)) {
             logger.info("Server started on port: " + serverSocket.getLocalPort());
             while (!executor.isShutdown()) {
-                Socket socket = serverSocket.accept(); //blocks
-                SocketMsgWorker worker = new SocketMsgWorker(socket);
+                final Socket socket = serverSocket.accept(); //blocks
+                final SocketMsgWorker worker = new SocketMsgWorker(socket);
                 worker.init();
+
                 worker.addShutdownRegistration(() -> workers.remove(worker));
+
                 workers.add(worker);
             }
         }

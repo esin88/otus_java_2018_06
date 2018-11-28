@@ -23,7 +23,7 @@ public class ServerMain {
 
     private static final String CLIENT_START_COMMAND = "java -jar ../L16.2.2-channel-client/target/client.jar";
     private static final int CLIENT_START_DELAY_SEC = 1;
-    private static final int CLIENTS_COUNT = 1;
+    private static final int CLIENTS_COUNT = 0;
 
     public static void main(String[] args) throws Exception {
         new ServerMain().start();
@@ -34,8 +34,8 @@ public class ServerMain {
         startClients(CLIENTS_COUNT, executorService);
 
 //        startBlockingServer();
-        startLogServer();
-        //startEchoServer();
+//        startLogServer();
+        startEchoServer();
 
         executorService.shutdown();
     }
