@@ -59,6 +59,7 @@ public class SocketMsgWorker implements MsgWorker {
 
     @Override
     public void close() {
+        System.out.println("Worker closed");
         shutdownRegistrations.forEach(Runnable::run);
         shutdownRegistrations.clear();
 

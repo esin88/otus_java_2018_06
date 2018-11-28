@@ -21,6 +21,7 @@ class ManagedMsgSocketWorker extends SocketMsgWorker {
         this.socket = socket;
     }
 
+    @Override
     public void close() {
         super.close();
         try {
